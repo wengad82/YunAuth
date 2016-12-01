@@ -1,0 +1,24 @@
+How to deploy the toolsuite.
+如何部署到环境中。
+
+
+套件采用分布式进行部署，待授权的是windows等客户端，这些客户端需要访问服务器，访问前需要通过该套件进行申请，授权实现后，才可以访问特定服务器的特定端口。
+总有3类角色，
+a.授权服务器，该角色接收客户端的授权请求，将授权请求信息记录到数据库中；入口程序是java类：GrantApplicationServer
+b.受控服务器，该角色的服务器是经防火墙受控的，读取授权服务器写入的信息，对本节点进行授权操作、收回操作等；入口程序是auth.py
+c.访问请求客户端，该角色是需要访问经防火墙受控的服务器的客户端，需要先向授权服务器提交授权申请，经受控服务器实现授权后，在有效期内可以访问受控服务器的特定端口对应的服务。入口程序是java类：GrantApplicationClient
+
+服务器端部署：
+1、
+需要确认纳入安全控制的linux系统安装了python2的版本，和mysql的驱动。
+如下是安装mysql驱动示例
+sudo yum install MySQL-python
+
+2、配置节点参数，在root的.bash_profile中加入如下，取值为本机的对外IP
+export AUTH_SERVER_IP=112.74.83.103
+
+3、将auth.py和YunAuthDefender.sh 拷贝到/root/bin下
+
+4、执行nohup sh YunAuthDefender.sh >YunAuthDefender.log 2>&1 &
+
+5、配置初始化防火墙策略
