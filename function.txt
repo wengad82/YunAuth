@@ -1,1 +1,21 @@
-hh
+
+
+In real production envirment, server machine must be running under same security policy,such as control under firewall using iptables. but alway,someone must visit the controlled machine on internet directly（for example, some ECS running on public IaaS aliyun(www.aliyun.com) ）,so this toolsuite give you a choice.it change the policy of linux iptables policy ,make someone in and close the door when it out of auth-time.
+
+
+There are three kinds of roles under this Suites, 
+A. authorization server, receiving client the role authorization request, the authorization request information record in the database; Entrance program is Java classes: GrantApplicationServer 
+B. controlled the server, the server is the firewall controlled, for the role of reading written authorization server information, this node on authorized operation, recovery of operation, etc.; Entrance program is auth.py 
+C. client, the role is to need access to the firewall controlled server client, need to submit to the license server license application, after authorized by the controlled server implementation, in the period of validity can access control server specific port the corresponding service. Entrance program is Java classes: GrantApplicationClient
+
+
+
+--在现实生产环境中，服务器会运行在某种安全策略下，比如linux系统通过iptables进行防火墙的控制。但是，通常情况下，可能会有需要通过公网直接访问受控的服务器。（比如部署在alibaba的公有云上的ECS）这种情况下，通过本套件，可以实现动态的该表防火墙策略，让一些经过授权的人可以进入服务器，并在过期后自动回收权限。
+
+套件采用分布式进行部署，待授权的是windows等客户端，这些客户端需要访问安全受控的服务器，访问前需要通过该套件的客户端程序向授权服务器端申请授权，授权实现后，才可以访问特定服务器的特定端口。
+
+套件总有3类角色，
+a.授权服务器，该角色接收客户端的授权请求，将授权请求信息记录到数据库中；入口程序是java类：GrantApplicationServer
+b.受控服务器，该角色的服务器是经防火墙受控的，读取授权服务器写入的信息，对本节点进行授权操作、收回操作等；入口程序是auth.py
+c.访问请求客户端，该角色是需要访问经防火墙受控的服务器的客户端，需要先向授权服务器提交授权申请，经受控服务器实现授权后，在有效期内可以访问受控服务器的特定端口对应的服务。入口程序是java类：GrantApplicationClient
+
