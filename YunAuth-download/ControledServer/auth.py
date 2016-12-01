@@ -55,7 +55,7 @@ cur=conn.cursor()
 #---
 
 logger("info","-----------------------"+local_ip+"---------------------------------------")
-#---´¦ÀíÉêÇëÊÚÈ¨µÄ¼ÇÂ¼
+#---ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨ï¿½Ä¼ï¿½Â¼
 logger("info","begin to deal with applying auth records...")
 AuthCUR=cur.execute("SELECT  a.client_ip,a.sys_id,b.sys_port,a.req_sn,a.user_id FROM t_req_auth_log a  , t_sys_conf  b where  a.sys_id=b.sys_id and a.process_flag='0' and a.req_type='1' and b.sys_ip='"+local_ip+"'")
 #aa=cur.execute("select  * from t_user_conf")
@@ -79,7 +79,7 @@ for ii in info:
 	ret=os.system(cmd)
 	logger("info","ret="+str(ret))
 	if ret!=0:
-		#--Èç¹ûÃ»ÓÐ¶ÔÓ¦µÄCHAIN£¬ÄÇÃ´´´½¨ÐÂµÄchain
+		#--ï¿½ï¿½ï¿½Ã»ï¿½Ð¶ï¿½Ó¦ï¿½ï¿½CHAINï¿½ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½chain
 		cmd="iptables -N "+chain
 		logger("info","create a new chain named:["+chain+"]->"+cmd)
 		sret=os.system(cmd)
@@ -87,7 +87,7 @@ for ii in info:
 			logger("fatal","create chain "+chain+" failed.")
 			exit_py(90)
 		else:
-			#--´´½¨CHAINºó£¬³õÊ¼¼ÓÈëÑÏ¸ñ¿ØÖÆ
+			#--ï¿½ï¿½ï¿½ï¿½CHAINï¿½ó£¬³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½
     		
 			cmd="iptables -I "+chain+" -p tcp --dport "+str(sys_port)+" -j DROP "
 			logger("info","Adding a initial rule to new chain ["+chain+"]")
@@ -106,7 +106,7 @@ for ii in info:
 				exit_py(90)
     		
 	else:
-		#--Èç¹ûÒÑ¾­´æÔÚ¸ÃCHAIN£¬ÄÇÃ´½«ÉêÇëµÄÊÚÈ¨¼ÓÈëtables
+		#--ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½CHAINï¿½ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½tables
 		cmd="iptables -I "+chain+" -s "+client_ip+" -p tcp --dport "+str(sys_port)+" -j ACCEPT"
 		logger("info","Inserting a new rule to chain ["+chain+"]")
 		logger("info","["+user_id+"]"+cmd)
@@ -128,7 +128,7 @@ for ii in info:
 logger("info","end of to deal with applying auth records...")
 
 
-#--¿ªÊ¼´¦ÀíÉêÇë ½âÊÚÈ¨µÄ¼ÇÂ¼
+#--ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È¨ï¿½Ä¼ï¿½Â¼
 logger("info","begin to deal with applying un-auth records...")
 
 unAuthCUR=cur.execute("SELECT  a.client_ip,a.sys_id,b.sys_port,a.req_sn,a.user_id FROM t_req_auth_log a  , t_sys_conf  b where  a.sys_id=b.sys_id and a.process_flag='0' and a.req_type='0' and b.sys_ip='"+local_ip+"'")
@@ -178,13 +178,13 @@ logger("info","end of to deal with applying un-auth records...")
 #	print ret
 
 
-#--¿ªÊ¼¼à¿ØÒÑÊµÏÖÊÚÈ¨µÄÉêÇë¼ÇÂ¼
-#ÈôÒÑ¾­µ½ÆÚ£¬ÄÇÃ´½øÐÐÈ¨ÏÞ»ØÊÕ£¬·ñÔòÂÔ¹ý
-#ÒòÊ¹ÓÃIP½øÐÐ¿ØÖÆ£¬¹Ê½«³öÏÖ¶àÈËÔÚÍ¬Ò»IPÏÂÉêÇë£¬½«´¦ÀíÎª£ºÈôÍ¬IP¶ÔÓÚÍ¬Ò»¸öÓ¦ÓÃÓÐ¶à±ÊÉêÇëÊÚÈ¨(°´ÕÕ¿Í»§¶ËIPºÍÏµÍ³ID½øÐÐ·Ö×é)£¬ÄÇÃ´ÒÔÎ´µ½ÆÚµÄÉêÇëÎªÓÅÏÈ½øÐÐÊÚÈ¨ÑÓ³Ù
+#--ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼
+#ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½È¨ï¿½Þ»ï¿½ï¿½Õ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¹ï¿½
+#ï¿½ï¿½Ê¹ï¿½ï¿½IPï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Æ£ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Ò»IPï¿½ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Í¬IPï¿½ï¿½ï¿½ï¿½Í¬Ò»ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨(ï¿½ï¿½ï¿½Õ¿Í»ï¿½ï¿½ï¿½IPï¿½ï¿½ÏµÍ³IDï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½Ã´ï¿½ï¿½Î´ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½È½ï¿½ï¿½ï¿½ï¿½ï¿½È¨ï¿½Ó³ï¿½
 logger("info","begin to revoke authed application records...")
 logger("info","local_ip="+local_ip)
 
-#-°´ÕÕ¿Í»§¶ËIPºÍÏµÍ³ID½øÐÐ·Ö×é´¦Àí
+#-ï¿½ï¿½ï¿½Õ¿Í»ï¿½ï¿½ï¿½IPï¿½ï¿½ÏµÍ³IDï¿½ï¿½ï¿½Ð·ï¿½ï¿½é´¦ï¿½ï¿½
 strSQL="SELECT  A.client_ip,B.SYS_ID ,COUNT(*) FROM t_req_auth_log a, t_sys_conf  b  " + \
 	"WHERE a.sys_id=b.sys_id  AND a.PROCESS_FLAG='1' AND a.req_type='1' AND b.sys_ip='"+local_ip+"'  GROUP BY A.CLIENT_IP,B.SYS_ID"
 
@@ -195,7 +195,7 @@ GSys_id=""
 for ii in oinfo:
 	GClient_ip=ii[0]
 	GSys_id=ii[1]
-#-²éÑ¯¶ÔÓ¦·Ö×éµÄ¼ÇÂ¼	
+#-ï¿½ï¿½Ñ¯ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½Â¼	
 	strSQL_inner="SELECT  a.client_ip,a.sys_id,b.sys_port,a.req_sn,a.USER_ID ,A.REQ_TIME,A.REQ_CO_TIME,"+ \
 	" CASE WHEN DATE_ADD(a.REQ_TIME,INTERVAL  a.REQ_CO_TIME MINUTE)<CURRENT_TIMESTAMP  THEN '1' "+ \
 	" ELSE '0' END DEL_FLAG "+ \
@@ -208,9 +208,9 @@ for ii in oinfo:
 	logger("info","Client_ip "+GClient_ip+" on sys_id "+GSys_id+" Authed record num is "+str(iCUR))
 	iinfo=cur.fetchmany(iCUR)
 
-#GDelChainFlag =0 ,±êÊ¾Îª¸Ãchain¶ÔÓ¦µÄ¸Ãip¶ÔÓ¦µÄ¹æÔò²»É¾³ý£¬·ñÔòÒªÉ¾³ý	
+#GDelChainFlag =0 ,ï¿½ï¿½Ê¾Îªï¿½ï¿½chainï¿½ï¿½Ó¦ï¿½Ä¸ï¿½ipï¿½ï¿½Ó¦ï¿½Ä¹ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÉ¾ï¿½ï¿½	
 	GDelChainFlag="1"
-#query listÖÐµÄdel_flagÈô=0£¬ÄÇÃ´Î´µ½ÆÚ;ÈôÎª1£¬ÄÇÃ´ÒÑ¾­µ½ÆÚ.	
+#query listï¿½Ðµï¿½del_flagï¿½ï¿½=0ï¿½ï¿½ï¿½ï¿½Ã´Î´ï¿½ï¿½ï¿½ï¿½;ï¿½ï¿½Îª1ï¿½ï¿½ï¿½ï¿½Ã´ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½.	
 	delChainFlag="1"
 	chain=""
 	client_ip=""
@@ -225,11 +225,11 @@ for ii in oinfo:
 		chain=jj[1]
 		client_ip=jj[0]
 		if delChainFlag=='0':
-			#ÈôÎ´µ½ÆÚ£¬ÄÇÃ´ÉèÖÃÒ»ÏÂ±¾·Ö×éµÄÈ«¾ÖÉ¾³ý±êÖ¾£¬²¢¼ÌÐøÏÂÒ»¸ö¼ÇÂ¼´¦Àí
+			#ï¿½ï¿½Î´ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Â±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
 			GDelChainFlag="0"
 			continue
 		else:
-			#ÈôÈ«¾Ö±êÖ¾Îª²»É¾³ý£¬ÄÇÃ´»ØÊÕÊý¾Ý¿âÖÐµÄÈ¨ÏÞ£¬¶ø²»É¾³ý·À»ðÇ½¹æÔò£¬·ñÔòÁ½Õß¶¼»ØÊÕ
+			#ï¿½ï¿½È«ï¿½Ö±ï¿½Ö¾Îªï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½Ðµï¿½È¨ï¿½Þ£ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ò£¬·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¶ï¿½ï¿½ï¿½ï¿½ï¿½
 			if GDelChainFlag=='0':
 				try:
 					upCUR=cur.execute("update t_req_auth_log set process_flag='2' where req_sn="+str(req_sn))
@@ -242,9 +242,9 @@ for ii in oinfo:
 				else:
 					conn.commit()
 					logger("info","revoke req_sn {"+str(req_sn)+"} in database success.")
-				#--´¦Àí²»É¾³ý·À»ðÇ½¹æÔòÇé¿öÏÂ£¬Êý¾Ý¿â»ØÊÕ½áÊø	
+				#--ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½Õ½ï¿½ï¿½ï¿½	
 			else:
-				#-´¦ÀíÊý¾Ý¿âºÍ·À»ðÇ½»ØÊÕ
+				#-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½Í·ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½
 				logger("info","*** delete from "+chain+" with "+client_ip+" which req_sn is "+str(req_sn))
 				cmd="iptables -L "+chain+" -n --line-numbers|grep "+client_ip+"|awk '{print $1}'"
 				logger("info",cmd)
@@ -263,7 +263,7 @@ for ii in oinfo:
 						idx=idx+1
 				
 				try:
-					#-±ê¼Ç½ø¶ÈÎªÊÚÈ¨»ØÊÕ£¬²¢×ªÒÆµ½ÀúÊ·±í
+					#-ï¿½ï¿½Ç½ï¿½ï¿½ï¿½Îªï¿½ï¿½È¨ï¿½ï¿½ï¿½Õ£ï¿½ï¿½ï¿½×ªï¿½Æµï¿½ï¿½ï¿½Ê·ï¿½ï¿½
 					upCUR=cur.execute("update t_req_auth_log set process_flag='2' where req_sn="+str(req_sn))
 					upCUR=cur.execute("insert into t_req_auth_log_his (REQ_SN,REQ_TIME,CLIENT_IP,CLIENT_PORT,user_id,sys_id,req_co_time,req_type,process_flag,OS_TYPE,OS_USER,OS_HOSTNAME,OS_MAC,JAR_MD5) select  * from t_req_auth_log where req_sn="+str(req_sn))
 					upCUR=cur.execute("delete from t_req_auth_log where req_sn="+str(req_sn))
@@ -314,7 +314,7 @@ for ii in oinfo:
 ####		else:
 ####			idx=idx+1
 ####	try:
-####		#-±ê¼Ç½ø¶ÈÎªÊÚÈ¨»ØÊÕ£¬²¢×ªÒÆµ½ÀúÊ·±í
+####		#-ï¿½ï¿½Ç½ï¿½ï¿½ï¿½Îªï¿½ï¿½È¨ï¿½ï¿½ï¿½Õ£ï¿½ï¿½ï¿½×ªï¿½Æµï¿½ï¿½ï¿½Ê·ï¿½ï¿½
 ####		upCUR=cur.execute("update t_req_auth_log set process_flag='2' where req_sn="+str(req_sn))
 ####		upCUR=cur.execute("insert into t_req_auth_log_his (REQ_SN,REQ_TIME,CLIENT_IP,CLIENT_PORT,user_id,sys_id,req_co_time,req_type,process_flag) select  * from t_req_auth_log where req_sn="+str(req_sn))
 ####		upCUR=cur.execute("delete from t_req_auth_log where req_sn="+str(req_sn))
