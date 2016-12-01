@@ -1,24 +1,56 @@
 How to deploy the toolsuite.
 如何部署到环境中。
 
+数据库部署:
+支持mysql数据库将myauth.sql导入到mysql中。
 
-套件采用分布式进行部署，待授权的是windows等客户端，这些客户端需要访问服务器，访问前需要通过该套件进行申请，授权实现后，才可以访问特定服务器的特定端口。
-总有3类角色，
-a.授权服务器，该角色接收客户端的授权请求，将授权请求信息记录到数据库中；入口程序是java类：GrantApplicationServer
-b.受控服务器，该角色的服务器是经防火墙受控的，读取授权服务器写入的信息，对本节点进行授权操作、收回操作等；入口程序是auth.py
-c.访问请求客户端，该角色是需要访问经防火墙受控的服务器的客户端，需要先向授权服务器提交授权申请，经受控服务器实现授权后，在有效期内可以访问受控服务器的特定端口对应的服务。入口程序是java类：GrantApplicationClient
 
-服务器端部署：
+受控服务器端部署：
 1、
 需要确认纳入安全控制的linux系统安装了python2的版本，和mysql的驱动。
 如下是安装mysql驱动示例
 sudo yum install MySQL-python
 
 2、配置节点参数，在root的.bash_profile中加入如下，取值为本机的对外IP
-export AUTH_SERVER_IP=112.74.83.103
+export AUTH_SERVER_IP=112.74.83.10
+生效该变量
+
 
 3、将auth.py和YunAuthDefender.sh 拷贝到/root/bin下
+auth.py中的如下连接数据库信息根据实际进行进行修改，（连接的是myauth.sql导入的那个库）
+conn=MySQLdb.connect(
+	host='XXX.XXX.XXX.XXX',
+	port=3306,
+	user='XX',
+	passwd='XXXX',
+	db='myauth'
+	)
 
-4、执行nohup sh YunAuthDefender.sh >YunAuthDefender.log 2>&1 &
 
-5、配置初始化防火墙策略
+4、配置初始化防火墙策略
+其中各个chain的名称必须和数据库中的t_sys_conf表的sys_id字段一致。iptables的初始化信息参考如下：
+[root@iZ94qhy8 ~]# iptables --list -nv
+Chain INPUT (policy ACCEPT 24634 packets, 1552K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+8184K 1469M ACCEPT     all  --  *      *       120.76.xx.xx       0.0.0.0/0                
+1227K  213M DB_DB2_56_50000  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:50000
+22686 1832K DB_DB2_56_50003  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:50003
+
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 191K packets, 132M bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain DB_DB2_56_50000 (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+  747 38108 LOG        tcp  --  *      *       0.0.0.0/0            120.76.xx.xx         state NEW LOG flags 0 level 2 prefix "IPTABLES_LOGGING_INVALID:"
+  750 38288 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:50000
+
+Chain DB_DB2_56_50003 (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   93  4532 LOG        tcp  --  *      *       0.0.0.0/0            120.76.xx.xx         state NEW LOG flags 0 level 2 prefix "IPTABLES_LOGGING_INVALID:"
+  127  5922 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:50003
+  
+5、执行nohup sh YunAuthDefender.sh >YunAuthDefender.log 2>&1 &
