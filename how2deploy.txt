@@ -5,7 +5,9 @@ How to deploy the toolsuite.
 支持mysql数据库将myauth.sql导入到mysql中。
 
 
-受控服务器端部署：
+
+
+受控服务器端部署（使用root进行部署，程序运行在root下）：
 1、
 需要确认纳入安全控制的linux系统安装了python2的版本，和mysql的驱动。
 如下是安装mysql驱动示例
